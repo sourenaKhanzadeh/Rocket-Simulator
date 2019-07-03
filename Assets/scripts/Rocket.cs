@@ -10,6 +10,9 @@ public class Rocket : MonoBehaviour
         "ovement Config")]
     [Range(200f, 350f)]
     [SerializeField] float rot_speed = 200f;
+    [SerializeField] ParticleSystem fulePT;
+    [SerializeField] ParticleSystem successPT;
+    [SerializeField] ParticleSystem explodePT;
 
     private Rigidbody rocketRB;
     private AudioSource rocketAS;
@@ -56,6 +59,7 @@ public class Rocket : MonoBehaviour
                     //Set volume back to max and play the sound
                     rocketAS.volume = maxRocketVolume;
                     rocketAS.Play();
+                    fulePT.Play();
                 }
 
             }
@@ -74,6 +78,7 @@ public class Rocket : MonoBehaviour
             else if (rocketAS.volume == 0)
             {
                 rocketAS.Stop();
+                fulePT.Stop();
             }
         }
     }
@@ -94,10 +99,12 @@ public class Rocket : MonoBehaviour
         switch (collision.gameObject.tag) {
             case "friendly":break;
             case "end":
-                NextLevel();
+                successPT.Play();
+                Invoke("NextLevel", 1f);
                 break;
             default:
-                ResetLevel();
+                explodePT.Play();
+                Invoke("ResetLevel", 1f);
                 break;
         }
     }

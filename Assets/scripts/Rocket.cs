@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
     #region classFields
     [Header("M" +
         "ovement Config")]
-    [Range(50f, 70f)]
-    public float rot_speed = 53f;
+    [Range(200f, 350f)]
+    [SerializeField] float rot_speed = 200f;
 
     private Rigidbody rocketRB;
     private AudioSource rocketAS;
@@ -30,6 +31,7 @@ public class Rocket : MonoBehaviour
         Rotate();
     }
 
+    #region movement
     void Rotate() {
         rocketRB.freezeRotation = true;
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
@@ -75,4 +77,28 @@ public class Rocket : MonoBehaviour
             }
         }
     }
-} 
+    #endregion
+
+    void ResetLevel() {
+        SceneManager.LoadScene(0);
+    }
+
+    void NextLevel() {
+        // TODO: add more levels
+        SceneManager.LoadScene(1);
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag) {
+            case "friendly":break;
+            case "end":
+                NextLevel();
+                break;
+            default:
+                ResetLevel();
+                break;
+        }
+    }
+}

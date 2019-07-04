@@ -10,6 +10,8 @@ public class Rocket : MonoBehaviour
         "ovement Config")]
     [Range(200f, 350f)]
     [SerializeField] float rot_speed = 200f;
+    [Range(200f, 350f)]
+    [SerializeField] float speed = 200f;
     [SerializeField] ParticleSystem fulePT;
     [SerializeField] ParticleSystem successPT;
     [SerializeField] ParticleSystem explodePT;
@@ -49,7 +51,7 @@ public class Rocket : MonoBehaviour
 
     void Thrust() {
         if (Input.GetKey(KeyCode.Space)) {
-            rocketRB.AddRelativeForce(Vector3.up);
+            rocketRB.AddRelativeForce(Vector3.up * Time.deltaTime * speed);
             if (rocketAS.volume < maxRocketVolume) //so it doesn't layer
             {
                 //Stop the audio if it's not fully faded out yet
@@ -90,7 +92,9 @@ public class Rocket : MonoBehaviour
 
     void NextLevel() {
         // TODO: add more levels
-        SceneManager.LoadScene(1);
+        int currLevel = SceneManager.GetActiveScene().buildIndex;
+        //if(SceneManager.GetSceneAt(currLevel + 1) != null)
+            SceneManager.LoadScene(currLevel + 1);
     }
 
 
